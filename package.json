@@ -1,0 +1,18 @@
+{
+  "name": "roambitest",
+  "version": "0.0.1",
+  "description": "test suite for roambi",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.0.3",
+    "debug": "^2.1.3",
+    "fs-readdir-recursive": "^0.1.1",
+    "mocha": "^2.2.1",
+    "yargs": "^3.7.0"
+  }
+}
