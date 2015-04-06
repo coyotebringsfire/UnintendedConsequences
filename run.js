@@ -73,7 +73,7 @@ debug("config "+JSON.stringify(config, null, 2));
 // suite = true test = true => run only the specified test in the specified suite
 if( config.suite && config.test ) {
 	debug("suite = true, test = true");
-	all_tests.forEach(function(test) {
+	all_tests.forEach(function doFilter(test) {
 		debug("matching "+test+" "+config.suite+"/"+config.test);
 		if( test.match(new RegExp(config.suite+"/"+config.test)) )
 			tests_to_run.push("suites/"+test);
@@ -82,7 +82,7 @@ if( config.suite && config.test ) {
 // suite = true test = false => run all of the tests in the specified suite
 else if( config.suite && !config.test ) {
 	debug("suite = true, test = false");
-	all_tests.forEach(function(test) {
+	all_tests.forEach(function doFilter(test) {
 		debug("matching "+test+" "+config.suite);
 		if( test.match(new RegExp(config.suite)) )
 			tests_to_run.push("suites/"+test);
@@ -91,7 +91,7 @@ else if( config.suite && !config.test ) {
 // suite = false test = true => run the specified test no matter which suite it's in
 else if( !config.suite && config.test ) {
 	debug("suite = false, test = true");
-	all_tests.forEach(function(test) {
+	all_tests.forEach(function doFilter(test) {
 		debug("matching "+test+" .*/"+config.test);
 		if( test.match(new RegExp(".*/"+config.test)) )
 			tests_to_run.push("suites/"+test);
@@ -100,11 +100,11 @@ else if( !config.suite && config.test ) {
 // suite = false test = false => run all tests in all suites
 else if( !config.suite && !config.test ) {
 	debug("suite = false, test = false");
-	all_tests.forEach(function(test) {
+	all_tests.forEach(function doPushTestToRun(test) {
 		tests_to_run.push("suites/"+test);
 	});
 }
-tests_to_run.forEach(function(test) {
+tests_to_run.forEach(function doAddFile(test) {
 	mocha.addFile(
         path.join(test)
     );
@@ -114,8 +114,42 @@ debug("tests_to_run "+JSON.stringify(tests_to_run, null, 2));
 
 process.env["PLATFORM"]=config.platform;
 
-mocha.run(function(failures){
-    process.on('exit', function () {
+mocha.suite.on('pre-require', function onPreRequire(context) {
+	context.describe.android=function(title, fn) {
+		//return without running tests if platform doesn't equal android
+		if( process.env["PLATFORM"] != "android" ) 
+			return false;
+		var suite = context.describe(title, fn);
+	    mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.ios=function(title, fn) {
+		//return without running tests if platform doesn't equal ios
+		if( process.env["PLATFORM"] != "ios" ) 
+			return false;
+		var suite = context.describe(title, fn);
+	    mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.web=function(title, fn) {
+		//return without running tests if platform doesn't equal web
+		if( process.env["PLATFORM"] != "web" ) 
+			return false;
+		var suite = context.describe(title, fn);
+	    mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.win=function(title, fn) {
+		//return without running tests if platform doesn't equal win
+		if( process.env["PLATFORM"] != "win" ) 
+			return false;
+		var suite = context.describe(title, fn);
+	    mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+});
+mocha.run(function onRun(failures){
+    process.on('exit', function onExit() {
         process.exit(failures);
     });
 });
