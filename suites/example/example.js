@@ -1,6 +1,13 @@
 'use strict';
 var debug=require('debug')('RoambiTest:login:debug');
 
+describe("login", function doLogin() {
+	it("should login", function doTest(done) {
+		debug("login");
+		done();
+	});
+});
+/*
 describe.android("login.android", function doLogin() {
 	it("should login", function doTest(done) {
 		debug("doing something");
@@ -44,3 +51,4 @@ describe.win("login.win", function doLogin() {
 		done();
 	});
 });
+*/

@@ -18,21 +18,13 @@ var fs=require('fs'),
 	    	alias:'p',
 	        describe: 'platform name. One of <'+platforms.join("|")+'>'
 	    })
-	    .option('suite', {
-	    	alias:"s",
-	        describe: 'suite to run'
-	    })
-	    .option('test', {
-	    	alias:'t',
-	        describe: 'test to run'
-	    })
 	    .option('ci', {
 			describe: 'run tests with CI configuration'
 		})
 		.config('config')
 		.require('platform')
 	    .check(verifyArgs)
-	    .argv,
+	    .argv, i, j, subdirFiles,
     Mocha = require('mocha'),
     read = require('fs-readdir-recursive');
 
@@ -41,82 +33,57 @@ function verifyArgs(argv, options) {
 	//verify the platform is valid
 	if( !argv.platform in platforms )
 		return false;
-	//verify the suite is valid
-	if( argv.suite && !fs.statSync("./suites/"+argv.suite).isDirectory() )
-		return false;
 	//verify the test is valid
-	if( argv.suite && argv.test && !fs.statSync("./suites/"+argv.suite+"/"+argv.test).isFile() )
-		return false;
+	argv._.forEach(function(testFileToRun) {
+		if( !fs.statSync(testFileToRun).isFile() )
+			return false;
+	});
 	return true;
 }
 
 config.platform=argv.platform;
 fs.writeFileSync(argv.config, JSON.stringify(config, null, 2));
 
-config.suite=argv.suite;
-config.test=argv.test;
+debug("test arg "+argv._);
+tests_to_run=argv._;
 
 var mocha = new Mocha({
     ui: 'bdd',
     reporter: argv.ci ? 'json' : 'spec'
 });
 
-//find all available tests
-all_tests=read(__dirname+'/suites', function testFilter(filename) {
-	return filename[0] !== '.';
-});
-
-debug("all_tests "+JSON.stringify(all_tests, null, 2));
 debug("config "+JSON.stringify(config, null, 2));
 
-//the default state is to run all tests in all suites
-// suite = true test = true => run only the specified test in the specified suite
-if( config.suite && config.test ) {
-	debug("suite = true, test = true");
-	all_tests.forEach(function doFilter(test) {
-		debug("matching "+test+" "+config.suite+"/"+config.test);
-		if( test.match(new RegExp(config.suite+"/"+config.test)) )
-			tests_to_run.push("suites/"+test);
-	});
+for( i=0; i<tests_to_run.length; i++) {
+	if( fs.statSync(tests_to_run[i]).isDirectory() ) {
+		subdirFiles=fs.readdirSync(tests_to_run[i]);
+		for( j=0; j<subdirFiles.length; j++ ) {
+			tests_to_run.push(tests_to_run[i]+"/"+subdirFiles[j]);
+		}
+	}
 }
-// suite = true test = false => run all of the tests in the specified suite
-else if( config.suite && !config.test ) {
-	debug("suite = true, test = false");
-	all_tests.forEach(function doFilter(test) {
-		debug("matching "+test+" "+config.suite);
-		if( test.match(new RegExp(config.suite)) )
-			tests_to_run.push("suites/"+test);
-	});
-}
-// suite = false test = true => run the specified test no matter which suite it's in
-else if( !config.suite && config.test ) {
-	debug("suite = false, test = true");
-	all_tests.forEach(function doFilter(test) {
-		debug("matching "+test+" .*/"+config.test);
-		if( test.match(new RegExp(".*/"+config.test)) )
-			tests_to_run.push("suites/"+test);
-	});
-}
-// suite = false test = false => run all tests in all suites
-else if( !config.suite && !config.test ) {
-	debug("suite = false, test = false");
-	all_tests.forEach(function doPushTestToRun(test) {
-		tests_to_run.push("suites/"+test);
-	});
-}
+
 tests_to_run.forEach(function doAddFile(test) {
-	mocha.addFile(
-        path.join(test)
-    );
+	var tst=test;
+	//if the argument is a directory, return
+	if( fs.statSync(tst).isDirectory() ) {
+		return;
+	} else {
+		debug("adding test "+test);
+		mocha.addFile(
+	        path.join(test)
+	    );
+	}
 });
 
 debug("tests_to_run "+JSON.stringify(tests_to_run, null, 2));
 
 process.env["PLATFORM"]=config.platform;
-
+/*
 mocha.suite.on('pre-require', function onPreRequire(context) {
 	context.describe.android=function(title, fn) {
 		//return without running tests if platform doesn't equal android
+		debug("checking platform for android "+process.env["PLATFORM"]);
 		if( process.env["PLATFORM"] != "android" ) 
 			return false;
 		var suite = context.describe(title, fn);
@@ -125,6 +92,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 	};
 	context.describe.ios=function(title, fn) {
 		//return without running tests if platform doesn't equal ios
+		debug("checking platform for ios "+process.env["PLATFORM"]);
 		if( process.env["PLATFORM"] != "ios" ) 
 			return false;
 		var suite = context.describe(title, fn);
@@ -133,6 +101,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 	};
 	context.describe.web=function(title, fn) {
 		//return without running tests if platform doesn't equal web
+		debug("checking platform for web "+process.env["PLATFORM"]);
 		if( process.env["PLATFORM"] != "web" ) 
 			return false;
 		var suite = context.describe(title, fn);
@@ -141,13 +110,16 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 	};
 	context.describe.win=function(title, fn) {
 		//return without running tests if platform doesn't equal win
+		debug("checking platform for win "+process.env["PLATFORM"]);
 		if( process.env["PLATFORM"] != "win" ) 
 			return false;
 		var suite = context.describe(title, fn);
 	    mocha.grep(suite.fullTitle());
 	    return suite;
 	};
+	debug(context);
 });
+*/
 mocha.run(function onRun(failures){
     process.on('exit', function onExit() {
         process.exit(failures);
