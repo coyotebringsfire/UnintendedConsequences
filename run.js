@@ -79,15 +79,16 @@ tests_to_run.forEach(function doAddFile(test) {
 debug("tests_to_run "+JSON.stringify(tests_to_run, null, 2));
 
 process.env["PLATFORM"]=config.platform;
-/*
+
 mocha.suite.on('pre-require', function onPreRequire(context) {
+	
 	context.describe.android=function(title, fn) {
 		//return without running tests if platform doesn't equal android
 		debug("checking platform for android "+process.env["PLATFORM"]);
 		if( process.env["PLATFORM"] != "android" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    mocha.grep(suite.fullTitle());
+	    //mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.ios=function(title, fn) {
@@ -96,7 +97,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "ios" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    mocha.grep(suite.fullTitle());
+	    //mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.web=function(title, fn) {
@@ -105,7 +106,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "web" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    mocha.grep(suite.fullTitle());
+	    //mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.win=function(title, fn) {
@@ -114,12 +115,12 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "win" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    mocha.grep(suite.fullTitle());
+	    //mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	debug(context);
 });
-*/
+
 mocha.run(function onRun(failures){
     process.on('exit', function onExit() {
         process.exit(failures);

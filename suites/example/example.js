@@ -7,7 +7,7 @@ describe("example", function doExample() {
 		done();
 	});
 });
-/*
+
 describe.android("example.android", function doLogin() {
 	it("should example", function doTest(done) {
 		debug("doing something");
@@ -51,4 +51,4 @@ describe.win("example.win", function doLogin() {
 		done();
 	});
 });
-*/
+
