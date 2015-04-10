@@ -8,6 +8,7 @@ describe("example", function doExample() {
 	});
 });
 
+//skip these android specific tests
 describe.android.skip("example.android", function doLogin() {
 	it("should example", function doTest(done) {
 		debug("doing something");
@@ -19,6 +20,7 @@ describe.android.skip("example.android", function doLogin() {
 	});
 });
 
+//skip these ios specific tests
 describe.ios.skip("example.ios", function doLogin() {
 	it("should example", function doTest(done) {
 		debug("doing something");
@@ -30,6 +32,7 @@ describe.ios.skip("example.ios", function doLogin() {
 	});
 });
 
+//skip these web specific tests
 describe.web.skip("example.web", function doLogin() {
 	it("should example", function doTest(done) {
 		debug("doing something");
@@ -41,6 +44,7 @@ describe.web.skip("example.web", function doLogin() {
 	});
 });
 
+//skip these win specific tests
 describe.win.skip("example.win", function doLogin() {
 	it("should example", function doTest(done) {
 		debug("doing something");

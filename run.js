@@ -99,6 +99,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
+
 	context.describe.ios=function(title, fn) {
 		//return without running tests if platform doesn't equal ios
 		debug("checking platform for ios "+process.env["PLATFORM"]);
@@ -118,6 +119,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
+
 	context.describe.web=function(title, fn) {
 		//return without running tests if platform doesn't equal web
 		debug("checking platform for web "+process.env["PLATFORM"]);
@@ -137,6 +139,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
+
 	context.describe.win=function(title, fn) {
 		//return without running tests if platform doesn't equal win
 		debug("checking platform for win "+process.env["PLATFORM"]);
@@ -156,6 +159,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
+	
 	debug(context);
 });
 
