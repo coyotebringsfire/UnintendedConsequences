@@ -1,52 +1,52 @@
 'use strict';
 var debug=require('debug')('RoambiTest:login:debug');
 
-describe("login", function doLogin() {
-	it("should login", function doTest(done) {
-		debug("login");
+describe("example", function doExample() {
+	it("should example", function doTest(done) {
+		debug("example");
 		done();
 	});
 });
 /*
-describe.android("login.android", function doLogin() {
-	it("should login", function doTest(done) {
+describe.android("example.android", function doLogin() {
+	it("should example", function doTest(done) {
 		debug("doing something");
 		done();
 	});
-	it("should login 2", function doTest(done) {
+	it("should example 2", function doTest(done) {
 		debug("doing something else");
 		done();
 	});
 });
 
-describe.ios("login.ios", function doLogin() {
-	it("should login", function doTest(done) {
+describe.ios("example.ios", function doLogin() {
+	it("should example", function doTest(done) {
 		debug("doing something");
 		done();
 	});
-	it("should login 2", function doTest(done) {
+	it("should example 2", function doTest(done) {
 		debug("doing something else");
 		done();
 	});
 });
 
-describe.web("login.web", function doLogin() {
-	it("should login", function doTest(done) {
+describe.web("example.web", function doLogin() {
+	it("should example", function doTest(done) {
 		debug("doing something");
 		done();
 	});
-	it("should login 2", function doTest(done) {
+	it("should example 2", function doTest(done) {
 		debug("doing something else");
 		done();
 	});
 });
 
-describe.win("login.win", function doLogin() {
-	it("should login", function doTest(done) {
+describe.win("example.win", function doLogin() {
+	it("should example", function doTest(done) {
 		debug("doing something");
 		done();
 	});
-	it("should login 2", function doTest(done) {
+	it("should example 2", function doTest(done) {
 		debug("doing something else");
 		done();
 	});
