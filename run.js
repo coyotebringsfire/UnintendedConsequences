@@ -2,7 +2,7 @@
 "use strict";
 
 var platforms=["android", "ios", "win", "web"],
-    config={},
+    config={}, now,
     tests_to_run=[];
 
 var fs=require('fs'),
@@ -26,7 +26,8 @@ var fs=require('fs'),
 	    .check(verifyArgs)
 	    .argv, i, j, subdirFiles,
     Mocha = require('mocha'),
-    read = require('fs-readdir-recursive');
+    read = require('fs-readdir-recursive'),
+    dateFormat = require('dateformat');
 
 //validate the args passed are valid
 function verifyArgs(argv, options) {
@@ -47,9 +48,11 @@ fs.writeFileSync(argv.config, JSON.stringify(config, null, 2));
 debug("test arg "+argv._);
 tests_to_run=argv._;
 
+now=new Date();
+process.env["multi"]="spec=- json=logs/"+dateFormat(now, "isoDateTime");
 var mocha = new Mocha({
     ui: 'bdd',
-    reporter: argv.ci ? 'json' : 'spec'
+    reporter: "mocha-multi"
 });
 
 debug("config "+JSON.stringify(config, null, 2));
