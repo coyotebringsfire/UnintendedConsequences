@@ -76,8 +76,6 @@ tests_to_run.forEach(function doAddFile(test) {
 	}
 });
 
-debug("tests_to_run "+JSON.stringify(tests_to_run, null, 2));
-
 process.env["PLATFORM"]=config.platform;
 
 mocha.suite.on('pre-require', function onPreRequire(context) {
@@ -88,7 +86,17 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "android" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    //mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.android.skip=function(title, fn) {
+		var suite = context.describe.skip(title, fn);
+	    return suite;
+	};
+	context.describe.android.only=function(title, fn) {
+		if( process.env["PLATFORM"] != "android" ) 
+			return false;
+		var suite = context.describe(title, fn);
+		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.ios=function(title, fn) {
@@ -97,7 +105,17 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "ios" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    //mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.ios.skip=function(title, fn) {
+		var suite = context.describe.skip(title, fn);
+	    return suite;
+	};
+	context.describe.ios.only=function(title, fn) {
+		if( process.env["PLATFORM"] != "ios" ) 
+			return false;
+		var suite = context.describe(title, fn);
+		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.web=function(title, fn) {
@@ -106,7 +124,17 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "web" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    //mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.web.skip=function(title, fn) {
+		var suite = context.describe.skip(title, fn);
+	    return suite;
+	};
+	context.describe.web.only=function(title, fn) {
+		if( process.env["PLATFORM"] != "web" ) 
+			return false;
+		var suite = context.describe(title, fn);
+		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	context.describe.win=function(title, fn) {
@@ -115,7 +143,17 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		if( process.env["PLATFORM"] != "win" ) 
 			return false;
 		var suite = context.describe(title, fn);
-	    //mocha.grep(suite.fullTitle());
+	    return suite;
+	};
+	context.describe.win.skip=function(title, fn) {
+		var suite = context.describe.skip(title, fn);
+	    return suite;
+	};
+	context.describe.win.only=function(title, fn) {
+		if( process.env["PLATFORM"] != "win" ) 
+			return false;
+		var suite = context.describe(title, fn);
+		mocha.grep(suite.fullTitle());
 	    return suite;
 	};
 	debug(context);

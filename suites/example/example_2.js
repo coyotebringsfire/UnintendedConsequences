@@ -12,7 +12,7 @@ describe("example 2", function doLogin() {
 	});
 });
 
-describe.win("example 2.win", function doLogin() {
+describe.win.only("example 2.win", function doLogin() {
 	it("should example again", function doTest(done) {
 		debug("example again");
 		done();
@@ -23,7 +23,7 @@ describe.win("example 2.win", function doLogin() {
 	});
 });
 
-describe.android("example 2.android", function doLogin() {
+describe.android.only("example 2.android", function doLogin() {
 	it("should example again", function doTest(done) {
 		debug("example again");
 		done();
@@ -34,7 +34,7 @@ describe.android("example 2.android", function doLogin() {
 	});
 });
 
-describe.ios("example 2.ios", function doLogin() {
+describe.ios.only("example 2.ios", function doLogin() {
 	it("should example again", function doTest(done) {
 		debug("example again");
 		done();
@@ -45,7 +45,7 @@ describe.ios("example 2.ios", function doLogin() {
 	});
 });
 
-describe.web("example 2.web", function doLogin() {
+describe.web.only("example 2.web", function doLogin() {
 	it("should example again", function doTest(done) {
 		debug("example again");
 		done();
