@@ -3,7 +3,7 @@
 
 var platforms=["android", "ios", "win", "web"],
     config={},
-    tests_to_run=[], all_tests=[];
+    tests_to_run=[];
 
 var fs=require('fs'),
 	debug=require('debug')('RoambiTest:debug'),
@@ -18,7 +18,7 @@ var fs=require('fs'),
 	    	alias:'p',
 	        describe: 'platform name. One of <'+platforms.join("|")+'>'
 	    })
-	    .option('ci', {
+	    .boolean('ci', {
 			describe: 'run tests with CI configuration'
 		})
 		.config('config')
