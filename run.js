@@ -82,88 +82,29 @@ tests_to_run.forEach(function doAddFile(test) {
 process.env["PLATFORM"]=config.platform;
 
 mocha.suite.on('pre-require', function onPreRequire(context) {
-	
-	context.describe.android=function(title, fn) {
-		//return without running tests if platform doesn't equal android
-		debug("checking platform for android "+process.env["PLATFORM"]);
-		if( process.env["PLATFORM"] != "android" ) 
-			return false;
-		var suite = context.describe(title, fn);
-	    return suite;
-	};
-	context.describe.android.skip=function(title, fn) {
-		var suite = context.describe.skip(title, fn);
-	    return suite;
-	};
-	context.describe.android.only=function(title, fn) {
-		if( process.env["PLATFORM"] != "android" ) 
-			return false;
-		var suite = context.describe(title, fn);
-		mocha.grep(suite.fullTitle());
-	    return suite;
-	};
-
-	context.describe.ios=function(title, fn) {
-		//return without running tests if platform doesn't equal ios
-		debug("checking platform for ios "+process.env["PLATFORM"]);
-		if( process.env["PLATFORM"] != "ios" ) 
-			return false;
-		var suite = context.describe(title, fn);
-	    return suite;
-	};
-	context.describe.ios.skip=function(title, fn) {
-		var suite = context.describe.skip(title, fn);
-	    return suite;
-	};
-	context.describe.ios.only=function(title, fn) {
-		if( process.env["PLATFORM"] != "ios" ) 
-			return false;
-		var suite = context.describe(title, fn);
-		mocha.grep(suite.fullTitle());
-	    return suite;
-	};
-
-	context.describe.web=function(title, fn) {
-		//return without running tests if platform doesn't equal web
-		debug("checking platform for web "+process.env["PLATFORM"]);
-		if( process.env["PLATFORM"] != "web" ) 
-			return false;
-		var suite = context.describe(title, fn);
-	    return suite;
-	};
-	context.describe.web.skip=function(title, fn) {
-		var suite = context.describe.skip(title, fn);
-	    return suite;
-	};
-	context.describe.web.only=function(title, fn) {
-		if( process.env["PLATFORM"] != "web" ) 
-			return false;
-		var suite = context.describe(title, fn);
-		mocha.grep(suite.fullTitle());
-	    return suite;
-	};
-
-	context.describe.win=function(title, fn) {
-		//return without running tests if platform doesn't equal win
-		debug("checking platform for win "+process.env["PLATFORM"]);
-		if( process.env["PLATFORM"] != "win" ) 
-			return false;
-		var suite = context.describe(title, fn);
-	    return suite;
-	};
-	context.describe.win.skip=function(title, fn) {
-		var suite = context.describe.skip(title, fn);
-	    return suite;
-	};
-	context.describe.win.only=function(title, fn) {
-		if( process.env["PLATFORM"] != "win" ) 
-			return false;
-		var suite = context.describe(title, fn);
-		mocha.grep(suite.fullTitle());
-	    return suite;
-	};
-	
-	debug(context);
+	platforms.forEach(function addPlatformFilter(p) {
+		debug("updating describe method for "+p);
+		var P=p;
+		context.describe[P]=function(title, fn) {
+			//return without running tests if platform doesn't equal android
+			debug("checking for "+P+" platform"+process.env["PLATFORM"]);
+			if( process.env["PLATFORM"] != P ) 
+				return false;
+			var suite = context.describe(title, fn);
+		    return suite;
+		};
+		context.describe[P].skip=function(title, fn) {
+			var suite = context.describe.skip(title, fn);
+		    return suite;
+		};
+		context.describe[P].only=function(title, fn) {
+			if( process.env["PLATFORM"] != P ) 
+				return false;
+			var suite = context.describe(title, fn);
+			mocha.grep(suite.fullTitle());
+		    return suite;
+		};
+	});
 });
 
 mocha.run(function onRun(failures){
