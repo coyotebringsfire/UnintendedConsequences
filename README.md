@@ -1,4 +1,14 @@
-
+###Dependencies
+node.js
+###Getting Started
+clone this repo
+```sh
+workspace $ git clone <path to repo>
+```
+install dependencies
+```sh
+workspace/roambi.test $ npm install
+```
 ###Usage
 ```sh
 node run -p <platform> <tests>
@@ -6,7 +16,7 @@ node run -p <platform> <tests>
 where
 *platform* is one of
 - ios
-- android
+- android <default>
 - win
 - web
 
