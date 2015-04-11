@@ -18,9 +18,6 @@ var fs=require('fs'),
 	    	alias:'p',
 	        describe: 'platform name. One of <'+platforms.join("|")+'>'
 	    })
-	    .boolean('ci', {
-			describe: 'run tests with CI configuration'
-		})
 		.config('config')
 		.require('platform')
 	    .check(verifyArgs)
@@ -109,6 +106,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 
 mocha.run(function onRun(failures){
     process.on('exit', function onExit() {
+    	debug("TODO saving results: logs/"+dateFormat(now, "isoDateTime"))
         process.exit(failures);
     });
 });
