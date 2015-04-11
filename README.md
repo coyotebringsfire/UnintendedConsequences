@@ -15,10 +15,10 @@ node run -p <platform> <tests>
 ```
 where
 *platform* is one of
-- ios
-- android <default>
-- win
-- web
+ - ios
+ - android <default>
+ - win
+ - web
 
 and tests is the path to a file (or files). If given a directory, all of the tests in the directory (and subdirectories) will be run.
 
