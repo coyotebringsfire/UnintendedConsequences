@@ -22,8 +22,7 @@ function Mongo() {
 		return deferred.promise;
 	};
 	this.save=function(path) {
-		var deferredFailures = [],
-			deferredPasses = [],
+		var deferreds = [],
 			inFile=require(__dirname+'/../'+path);
 			debug("saving test results");
 
@@ -32,31 +31,19 @@ function Mongo() {
 			Object.keys(inFile[suite]).forEach( function parseTestResults(test) {
 				var t=test;
 				var deferred = Q.defer();
-				if( inFile[s][t] === "PASSED" ) {
-					deferredPasses.push( deferred.promise );
-					mongo_db.collection("passedTests").insert({"suite":s, "test":t, "timestamp":dateFormat(now, "isoDateTime")}, {upsert:false}, function(err, result) {
-						if(err) {
-							debug("insert error:"+err);
-							deferred.reject("insert results "+err);
-						}
-						debug("pass insert results "+result);
-						deferred.resolve(result);
-					});
-				} else if( inFile[s][t] === "FAILED" ) {
-					deferredFailures.push( deferred.promise );
-					mongo_db.collection("failedTests").insert({"suite":s, "test":t, "timestamp":dateFormat(now, "isoDateTime")}, {upsert:false}, function(err, result) {
-						if(err) {
-							debug("insert error:"+err);
-							deferred.reject("insert results "+err);
-						}
-						debug("failure insert results "+result);
-						deferred.resolve(result);
-					});
-				}
+				deferreds.push( deferred.promise );
+				mongo_db.collection("testruns").insert({"passed":inFile[s][t] === "PASSED", "suite":s, "test":t, "timestamp":dateFormat(now, "isoDateTime")}, {upsert:false}, function(err, result) {
+					if(err) {
+						debug("insert error:"+err);
+						deferred.reject("insert results "+err);
+					}
+					debug("pass insert results "+result);
+					deferred.resolve(result);
+				});
 			});
 		});
 
-		return Q.all(deferredPasses.concat(deferredFailures));
+		return Q.all(deferreds);
 	};
 	this.close=function() {
 		debug("closing db");
