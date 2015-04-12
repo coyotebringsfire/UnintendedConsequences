@@ -1,5 +1,6 @@
 'use strict';
-var debug=require('debug')('RoambiTest:example:debug');
+var debug=require('debug')('RoambiTest:example:debug'),
+	should=require('should');
 
 describe("example", function doExample() {
 	it("should example", function doTest(done) {
@@ -14,8 +15,9 @@ describe.android("example.android", function doLogin() {
 		debug("doing something");
 		done();
 	});
-	it("should example 2", function doTest(done) {
+	it("should example 2 fail", function doTest(done) {
 		debug("doing something else");
+		should.fail();
 		done();
 	});
 });
@@ -26,8 +28,9 @@ describe.ios("example.ios", function doLogin() {
 		debug("doing something");
 		done();
 	});
-	it("should example 2", function doTest(done) {
+	it("should example 2 fail", function doTest(done) {
 		debug("doing something else");
+		should.fail();
 		done();
 	});
 });
@@ -38,8 +41,9 @@ describe.web("example.web", function doLogin() {
 		debug("doing something");
 		done();
 	});
-	it("should example 2", function doTest(done) {
+	it("should example 2 fail", function doTest(done) {
 		debug("doing something else");
+		should.fail();
 		done();
 	});
 });
@@ -50,8 +54,9 @@ describe.win("example.win", function doLogin() {
 		debug("doing something");
 		done();
 	});
-	it("should example 2", function doTest(done) {
+	it("should example 2 fail", function doTest(done) {
 		debug("doing something else");
+		should.fail();
 		done();
 	});
 });
