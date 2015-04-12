@@ -18,12 +18,20 @@ var fs=require('fs'),
 	    	alias:'p',
 	        describe: 'platform name. One of <'+platforms.join("|")+'>'
 	    })
+	    .option('db.port', {
+	    	describe: 'db port'
+	    })
+	    .option('db.host', {
+	    	describe: 'db host'
+	    })
 		.config('config')
 		.require('platform')
 	    .check(verifyArgs)
 	    .argv, i, j, subdirFiles,
     Mocha = require('mocha'),
-    dateFormat = require('dateformat');
+    dateFormat = require('dateformat'),
+    Model=require('./models/Model'),
+    model=new Model("Mongo");
 
 //validate the args passed are valid
 function verifyArgs(argv, options) {
@@ -39,13 +47,17 @@ function verifyArgs(argv, options) {
 }
 
 config.platform=argv.platform;
+config.db={
+	port: argv.db.port,
+	host: argv.db.host
+};
 fs.writeFileSync(argv.config, JSON.stringify(config, null, 2));
 
 debug("test arg "+argv._);
 tests_to_run=argv._;
 
 now=new Date();
-process.env["multi"]="spec=- json=logs/"+dateFormat(now, "isoDateTime");
+process.env["multi"]="spec=- json=logs/"+dateFormat(now, "isoDateTime")+".json";
 var mocha = new Mocha({
     ui: 'bdd',
     reporter: "mocha-multi"
@@ -104,8 +116,29 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 });
 
 mocha.run(function onRun(failures){
+	process.on('beforeExit', function beforeExit() {
+		if( typeof process.saved === typeof undefined ) {
+	    	debug(process.saved+" saving results: logs/"+dateFormat(now, "isoDateTime"));
+	    	model.connect(config.db)
+	    		.then(function() {
+	    			debug("saving");
+	    			return model.save("logs/"+dateFormat(now, "isoDateTime"));
+	    		})
+	    		.then(function() {
+	    			debug("closing:"+JSON.stringify(model));
+	    			return model.close();
+	    		})
+	    		.then(function() {
+	    			debug("DONE");
+	    			process.saved=true;
+	    			process.exit(failures);
+	    		}, function(err) {
+	    			debug("ERROR "+err);
+	    			process.exit(failures);
+	    		});
+    	}
+    });
     process.on('exit', function onExit() {
-    	debug("TODO saving results: logs/"+dateFormat(now, "isoDateTime"))
-        process.exit(failures);
+    	debug("onExit");
     });
 });
