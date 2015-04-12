@@ -48,8 +48,8 @@ function verifyArgs(argv, options) {
 
 config.platform=argv.platform;
 config.db={
-	port: argv.db.port,
-	host: argv.db.host
+	port: argv.db ? argv.db.port : undefined,
+	host: argv.db ? argv.db.host : undefined
 };
 fs.writeFileSync(argv.config, JSON.stringify(config, null, 2));
 
