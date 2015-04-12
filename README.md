@@ -27,6 +27,8 @@ and tests is the path to a file (or files). If given a directory, all of the tes
   --config        config.json file to use saved settings
                                                       [default: "./config.json"]
   --platform, -p  platform name. One of <android|ios|win|web>         [required]
+  --db.port       db port                                                       
+  --db.host       db host 
 
 ```sh
 $  node run -p ios suites
@@ -69,3 +71,17 @@ describe.bb("blackberry tests", function runBBTests() {
 	...
 });
 ```
+
+#####Persisting test results
+There is out of the box support for saving test results to MongoDB. You can specify and --db.host --db.port on the command line, or edit config.json and add a db key. The arguments are saved in config.json if given on the command line
+```sh
+{
+  "platform": "android",
+  "db": {
+    "host":"localhost",
+    "port":27017
+  }
+}
+```
+
+The test results are also saved in json format in the logs/ directory, regardless of whether mongodb logging is enabled.
