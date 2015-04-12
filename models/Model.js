@@ -7,7 +7,6 @@ function Model(model) {
 	}
 	//inject the specified model
 	var m=require("./"+model+".js");
-	debug(m);
 	m.apply(this);
 }
 

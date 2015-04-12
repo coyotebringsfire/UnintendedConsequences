@@ -5,7 +5,7 @@ var platforms=["android", "ios", "win", "web"],
     config={}, now,
     tests_to_run=[];
 
-var fs=require('fs'),
+var fs=require('fs-extra'),
 	debug=require('debug')('RoambiTest:debug'),
 	path=require('path'),
 	argv=require('yargs')
@@ -57,7 +57,7 @@ debug("test arg "+argv._);
 tests_to_run=argv._;
 
 now=new Date();
-process.env["multi"]="spec=- json=logs/"+dateFormat(now, "isoDateTime")+".json";
+process.env["multi"]="spec=- mocha-spec-json-reporter=/dev/null";
 var mocha = new Mocha({
     ui: 'bdd',
     reporter: "mocha-multi"
@@ -95,7 +95,7 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		var P=p;
 		context.describe[P]=function(title, fn) {
 			//return without running tests if platform doesn't equal android
-			debug("checking for "+P+" platform"+process.env["PLATFORM"]);
+			debug("checking for "+P+" platform "+process.env["PLATFORM"]);
 			if( process.env["PLATFORM"] != P ) 
 				return false;
 			var suite = context.describe(title, fn);
@@ -114,10 +114,13 @@ mocha.suite.on('pre-require', function onPreRequire(context) {
 		};
 	});
 });
-
+process.on('uncaughtException', function uncaught(err) {
+	debug(err);
+});
 mocha.run(function onRun(failures){
 	process.on('beforeExit', function beforeExit() {
-		if( typeof process.saved === typeof undefined ) {
+		fs.copySync("mocha-output.json", "logs/"+dateFormat(now, "isoDateTime")+".json");
+		if( config.db.host && config.db.port && typeof process.saved === typeof undefined ) {
 	    	debug(process.saved+" saving results: logs/"+dateFormat(now, "isoDateTime"));
 	    	model.connect(config.db)
 	    		.then(function() {
@@ -138,6 +141,7 @@ mocha.run(function onRun(failures){
 	    		});
     	}
     });
+
     process.on('exit', function onExit() {
     	debug("onExit");
     });

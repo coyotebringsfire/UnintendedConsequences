@@ -27,30 +27,32 @@ function Mongo() {
 			inFile=require(__dirname+'/../'+path);
 			debug("saving test results");
 
-		inFile.failures.forEach(function doSaveFailure(failedTest) {
-			var deferred = Q.defer();
-			deferredFailures.push( deferred.promise );
-			failedTest.timestamp=dateFormat(now, "isoDateTime");
-			mongo_db.collection("failedTests").insert(failedTest, {upsert:true}, function(err, result) {
-				if(err) {
-					debug("insert error:"+err);
-					deferred.reject("insert results "+err);
+		Object.keys(inFile).forEach( function parseSuiteResults(suite) {
+			var s=suite;
+			Object.keys(inFile[suite]).forEach( function parseTestResults(test) {
+				var t=test;
+				var deferred = Q.defer();
+				if( inFile[s][t] === "PASSED" ) {
+					deferredPasses.push( deferred.promise );
+					mongo_db.collection("passedTests").insert({"suite":s, "test":t, "timestamp":dateFormat(now, "isoDateTime")}, {upsert:false}, function(err, result) {
+						if(err) {
+							debug("insert error:"+err);
+							deferred.reject("insert results "+err);
+						}
+						debug("pass insert results "+result);
+						deferred.resolve(result);
+					});
+				} else if( inFile[s][t] === "FAILED" ) {
+					deferredFailures.push( deferred.promise );
+					mongo_db.collection("failedTests").insert({"suite":s, "test":t, "timestamp":dateFormat(now, "isoDateTime")}, {upsert:false}, function(err, result) {
+						if(err) {
+							debug("insert error:"+err);
+							deferred.reject("insert results "+err);
+						}
+						debug("failure insert results "+result);
+						deferred.resolve(result);
+					});
 				}
-				debug("insert results "+result);
-				deferred.resolve(result);
-			});
-		});
-		inFile.passes.forEach(function doSavePass(passedTest) {
-			var deferred = Q.defer();
-			deferredPasses.push( deferred.promise );
-			passedTest.timestamp=dateFormat(now, "isoDateTime");
-			mongo_db.collection("passedTests").insert(passedTest, {upsert:true}, function(err, result) {
-				if(err) {
-					debug("insert error:"+err);
-					deferred.reject("insert results "+err);
-				}
-				debug("insert results "+result);
-				deferred.resolve(result);
 			});
 		});
 
