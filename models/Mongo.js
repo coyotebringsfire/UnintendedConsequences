@@ -10,7 +10,10 @@ function Mongo() {
 
 	this.connect=function(options) {
 		var deferred = Q.defer()
-			connectString="mongodb://"+options.host+":"+options.port+"/testruns";
+			connectString="mongodb://";
+		if( options.login )
+			connectString+=options.login+":"+options.password+"@";
+		connectString+=options.host+":"+options.port+"/testruns";
 		debug("connectString:"+connectString);
 		MongoClient.connect(connectString, function(err, db) {
 			if(err) 
