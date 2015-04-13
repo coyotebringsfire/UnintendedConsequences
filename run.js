@@ -24,6 +24,12 @@ var fs=require('fs-extra'),
 	    .option('db.host', {
 	    	describe: 'db host'
 	    })
+	    .option('db.login', {
+	    	describe: 'db username'
+	    })
+	    .option('db.password', {
+	    	describe: 'db password'
+	    })
 		.config('config')
 		.require('platform')
 	    .check(verifyArgs)
@@ -49,7 +55,9 @@ function verifyArgs(argv, options) {
 config.platform=argv.platform;
 config.db={
 	port: argv.db ? argv.db.port : undefined,
-	host: argv.db ? argv.db.host : undefined
+	host: argv.db ? argv.db.host : undefined,
+	user: argv.db ? argv.db.login : undefined,
+	password: argv.db ? argv.db.password : undefined,
 };
 fs.writeFileSync(argv.config, JSON.stringify(config, null, 2));
 
