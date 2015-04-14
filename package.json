@@ -1,5 +1,5 @@
 {
-  "name": "roambitest",
+  "name": "nomad",
   "version": "0.0.1",
   "description": "test suite for roambi",
   "main": "run.js",
@@ -15,8 +15,8 @@
     "fs-extra": "^0.18.0",
     "mocha": "^2.2.1",
     "mocha-multi": "^0.6.0",
-    "mocha-spec-json-reporter": "0.0.2",
     "mongodb": "^2.0.27",
+    "mongoreporter": "0.0.18",
     "q": "^1.2.0",
     "should": "^5.2.0",
     "yargs": "^3.7.0"

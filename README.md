@@ -1,3 +1,5 @@
+#Nomad
+
 ###Dependencies
 node.js
 ###Getting Started
@@ -7,7 +9,7 @@ workspace $ git clone <path to repo>
 ```
 install dependencies
 ```sh
-workspace/roambi.test $ npm install
+workspace/Nomad $ npm install
 ```
 ###Usage
 ```sh
@@ -29,6 +31,8 @@ and tests is the path to a file (or files). If given a directory, all of the tes
   --platform, -p  platform name. One of <android|ios|win|web>         [required]
   --db.port       db port                                                       
   --db.host       db host 
+  --db.login      db username                                                   
+  --db.password   db password  
 
 ```sh
 $  node run -p ios suites
@@ -73,15 +77,15 @@ describe.bb("blackberry tests", function runBBTests() {
 ```
 
 #####Persisting test results
-There is out of the box support for saving test results to MongoDB. You can specify and --db.host --db.port on the command line, or edit config.json and add a db key. The arguments are saved in config.json if given on the command line
+There is out of the box support for saving test results to MongoDB. You can specify and --db.host, --db.port, --db.login, --db.password on the command line, or edit config.json and add a db key. The arguments are saved in config.json if given on the command line
 ```sh
 {
   "platform": "android",
   "db": {
     "host":"localhost",
-    "port":27017
+    "port":27017,
+    "login":"dbuser",
+    "password:"dbpassword"
   }
 }
 ```
-
-The test results are also saved in json format in the logs/ directory, regardless of whether mongodb logging is enabled.

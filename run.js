@@ -6,7 +6,7 @@ var platforms=["android", "ios", "win", "web"],
     tests_to_run=[];
 
 var fs=require('fs-extra'),
-	debug=require('debug')('RoambiTest:debug'),
+	debug=require('debug')('Nomad:debug'),
 	path=require('path'),
 	argv=require('yargs')
 		.help('help').alias('help', 'h')
@@ -33,11 +33,9 @@ var fs=require('fs-extra'),
 		.config('config')
 		.require('platform')
 	    .check(verifyArgs)
-	    .argv, i, j, subdirFiles,
+	    .argv, i, j, subdirFiles, connectString="mongodb://",
     Mocha = require('mocha'),
-    dateFormat = require('dateformat'),
-    Model=require('./models/Model'),
-    model=new Model("Mongo");
+    dateFormat = require('dateformat');
 
 //validate the args passed are valid
 function verifyArgs(argv, options) {
@@ -65,7 +63,12 @@ debug("test arg "+argv._);
 tests_to_run=argv._;
 
 now=new Date();
-process.env["multi"]="spec=- mocha-spec-json-reporter=/dev/null";
+process.env["multi"]="spec=- mongoreporter=/dev/null";
+if( config.db.user )
+	connectString+=config.db.user+":"+config.db.password+"@";
+connectString+=config.db.host+":"+config.db.port+"/testruns";
+debug("connectString=%s", connectString);
+process.env["MONGOURL"]=connectString;
 var mocha = new Mocha({
     ui: 'bdd',
     reporter: "mocha-multi"
@@ -126,30 +129,6 @@ process.on('uncaughtException', function uncaught(err) {
 	debug(err);
 });
 mocha.run(function onRun(failures){
-	process.on('beforeExit', function beforeExit() {
-		fs.copySync("mocha-output.json", "logs/"+dateFormat(now, "isoDateTime")+".json");
-		if( config.db.host && config.db.port && typeof process.saved === typeof undefined ) {
-	    	debug(process.saved+" saving results: logs/"+dateFormat(now, "isoDateTime"));
-	    	model.connect(config.db)
-	    		.then(function() {
-	    			debug("saving");
-	    			return model.save("logs/"+dateFormat(now, "isoDateTime"));
-	    		})
-	    		.then(function() {
-	    			debug("closing:"+JSON.stringify(model));
-	    			return model.close();
-	    		})
-	    		.then(function() {
-	    			debug("DONE");
-	    			process.saved=true;
-	    			process.exit(failures);
-	    		}, function(err) {
-	    			debug("ERROR "+err);
-	    			process.exit(failures);
-	    		});
-    	}
-    });
-
     process.on('exit', function onExit() {
     	debug("onExit");
     });

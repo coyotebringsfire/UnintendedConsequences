@@ -1,5 +1,5 @@
 'use strict';
-var debug=require('debug')('RoambiTest:example_2:debug');
+var debug=require('debug')('Nomad:example_2:debug');
 
 describe("example 2", function doLogin() {
 	it("should example again", function doTest(done) {
