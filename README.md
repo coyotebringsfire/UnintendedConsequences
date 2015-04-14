@@ -1,5 +1,5 @@
 #Nomad
-
+Test superstructure for running MochaJS tests.
 ###Dependencies
 node.js
 ###Getting Started
