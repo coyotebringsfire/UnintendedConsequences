@@ -16,7 +16,7 @@
     "mocha": "^2.2.1",
     "mocha-multi": "^0.6.0",
     "mongodb": "^2.0.27",
-    "mongoreporter": "0.0.18",
+    "mongoreporter": "0.0.19",
     "q": "^1.2.0",
     "should": "^5.2.0",
     "yargs": "^3.7.0"
