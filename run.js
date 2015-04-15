@@ -63,15 +63,26 @@ debug("test arg "+argv._);
 tests_to_run=argv._;
 
 now=new Date();
-process.env["multi"]="spec=- mongoreporter=/dev/null";
+//process.env["multi"]="spec=- mongoreporter=/dev/null";
 if( config.db.user )
 	connectString+=config.db.user+":"+config.db.password+"@";
 connectString+=config.db.host+":"+config.db.port+"/testruns";
 debug("connectString=%s", connectString);
-process.env["MONGOURL"]=connectString;
+//process.env["MONGOURL"]=connectString;
 var mocha = new Mocha({
     ui: 'bdd',
-    reporter: "mocha-multi"
+    reporter: "mocha-multi",
+    reporterOptions:{
+    	"spec": { 
+    		stdout:"-"
+    	},
+    	"mongoreporter": { 
+    		stdout:"/dev/null", 
+    		options: {
+    			url:connectString
+    		} 
+    	}
+    }
 });
 
 debug("config "+JSON.stringify(config, null, 2));
