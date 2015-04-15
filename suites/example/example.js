@@ -35,29 +35,4 @@ describe.ios("example.ios", function doLogin() {
 	});
 });
 
-//skip these web specific tests
-describe.web("example.web", function doLogin() {
-	it("should example", function doTest(done) {
-		debug("doing something");
-		done();
-	});
-	it("should example 2 fail", function doTest(done) {
-		debug("doing something else");
-		should.fail();
-		done();
-	});
-});
-
-//skip these win specific tests
-describe.win("example.win", function doLogin() {
-	it("should example", function doTest(done) {
-		debug("doing something");
-		done();
-	});
-	it("should example 2 fail", function doTest(done) {
-		debug("doing something else");
-		should.fail();
-		done();
-	});
-});
 
