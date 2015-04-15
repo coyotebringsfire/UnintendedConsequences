@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-var platforms=["android", "ios", "win", "web"],
+var platforms=["android", "ios"],
     config={}, now,
     tests_to_run=[];
 
