@@ -1,4 +1,4 @@
-#Nomad
+#Gibraltar
 Test superstructure for running MochaJS tests.
 ###Dependencies
 node.js
@@ -9,7 +9,7 @@ workspace $ git clone <path to repo>
 ```
 install dependencies
 ```sh
-workspace/Nomad $ npm install
+workspace/Gibraltar $ npm install
 ```
 ###Usage
 ```sh
