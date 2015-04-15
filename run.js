@@ -6,7 +6,7 @@ var platforms=["android", "ios", "win", "web"],
     tests_to_run=[];
 
 var fs=require('fs-extra'),
-	debug=require('debug')('Nomad:debug'),
+	debug=require('debug')('Gibraltar:debug'),
 	path=require('path'),
 	argv=require('yargs')
 		.help('help').alias('help', 'h')

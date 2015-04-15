@@ -1,5 +1,5 @@
 'use strict';
-var debug=require('debug')('Nomad:example:debug'),
+var debug=require('debug')('Gibraltar:example:debug'),
 	should=require('should');
 
 describe("example", function doExample() {
