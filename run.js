@@ -78,6 +78,7 @@ var mocha = new Mocha({
     	},
     	"mongoreporter": { 
     		stdout:"/dev/null", 
+    		meta: false,
     		options: {
     			url:connectString
     		} 
