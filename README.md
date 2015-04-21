@@ -1,5 +1,8 @@
 #Gibraltar
-Test superstructure for running functional tests using MochaJS. Gibraltor uses the mocha-multi reporter to show test progress to the user via the spec reporter and also uses the mongoreporter to save the results to a mongo db. There is support for defining 'platforms' by which test suites can be filtered. Out of the box, there are android and ios platforms defined.
+Test superstructure for running functional tests using MochaJS. The idea is to collect useful utilities into a single package. 
+Gibraltor uses the mocha-multi reporter to show test progress to the user via the 'spec' reporter and also uses the 'mongoreporter' reporter to save the results to a mongo db. 
+
+There is support for defining 'platforms' by which test suites can be filtered; Out of the box, there are android and ios platforms defined.
 ###Dependencies
 node.js
 ###Getting Started
@@ -17,8 +20,8 @@ node run -p <platform> <tests>
 ```
 where
 *platform* is one of
- - ios
- - android <default>
+- ios
+- android <default>
 
 and tests is the path to a file (or files). If given a directory, all of the tests in the directory (and subdirectories) will be run.
 
@@ -54,19 +57,9 @@ $  node run -p android suites/example/example.js
 
    3 passing (17ms)
 ```
-```sh
-$  node run -p win suites/example/example*
-
-   example 2.win
-     ✓ should example again 
-     ✓ should example again again 
-
-
-   2 passing (16ms)
-```
 To add another platform filter. Update the platforms variable in run.js
 ```sh
-var platforms=["android", "ios", "win", "web", "bb"],
+var platforms=["android", "ios", "bb"]
 ```
 ```sh
 describe.bb("blackberry tests", function runBBTests() {
@@ -83,7 +76,7 @@ There is out of the box support for saving test results to MongoDB. You can spec
     "host":"localhost",
     "port":27017,
     "login":"dbuser",
-    "password:"dbpassword"
+    "password":"dbpassword"
   }
 }
 ```
