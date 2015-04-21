@@ -1,5 +1,5 @@
 #Gibraltar
-Test superstructure for running MochaJS tests.
+Test superstructure for running functional tests using MochaJS. Gibraltor uses the mocha-multi reporter to show test progress to the user via the spec reporter and also uses the mongoreporter to save the results to a mongo db. There is support for defining 'platforms' by which test suites can be filtered. Out of the box, there are android and ios platforms defined.
 ###Dependencies
 node.js
 ###Getting Started
