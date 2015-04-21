@@ -19,8 +19,6 @@ where
 *platform* is one of
  - ios
  - android <default>
- - win
- - web
 
 and tests is the path to a file (or files). If given a directory, all of the tests in the directory (and subdirectories) will be run.
 
@@ -28,7 +26,7 @@ and tests is the path to a file (or files). If given a directory, all of the tes
   --help, -h      Show help                                                     
   --config        config.json file to use saved settings
                                                       [default: "./config.json"]
-  --platform, -p  platform name. One of <android|ios|win|web>         [required]
+  --platform, -p  platform name. One of <android|ios>         [required]
   --db.port       db port                                                       
   --db.host       db host 
   --db.login      db username                                                   
