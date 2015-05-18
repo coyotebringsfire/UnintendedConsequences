@@ -12,7 +12,7 @@ workspace $ git clone <path to repo>
 ```
 install dependencies
 ```sh
-workspace/Gibraltar $ npm install
+workspace/UnintendedConsequences $ npm install
 ```
 ###Usage
 ```sh
