@@ -1,4 +1,4 @@
-#Gibraltar
+#UnintendedConsequences
 Test superstructure for running functional tests using MochaJS. The idea is to collect useful utilities into a single package. 
 Gibraltor uses the _mocha-multi_ reporter to show test progress to the user via the _spec_ reporter and also uses the _mongoreporter_ reporter to save the results to a mongo db. 
 
